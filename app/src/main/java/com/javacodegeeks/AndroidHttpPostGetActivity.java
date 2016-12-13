@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.javacodegeeks.R;
@@ -30,10 +31,12 @@ public class AndroidHttpPostGetActivity extends Activity{
         client = new OkHttpClient();
         JSON = MediaType.parse("application/json; charset=utf-8");
     }
-    public void makeGetRequest(View v) throws IOException{
+    public void makeGetRequest(View v) throws IOException {
         GetTask task = new GetTask();
         task.execute();
+
     }
+
 
     public class GetTask extends AsyncTask {
         private Exception exception;
@@ -66,15 +69,16 @@ public class AndroidHttpPostGetActivity extends Activity{
             return null;
         }
     }
+    public void onClick(View v) {
 
-    public void makePostRequest(View v) throws IOException {
-        PostTask task = new PostTask();
-        task.execute();
-        Toast.makeText(getApplicationContext(), "nakapasa na", Toast.LENGTH_LONG).show();
+        public void makePostRequest (View v)throws IOException {
+            PostTask task = new PostTask();
+            task.execute();
+            Toast.makeText(getApplicationContext(), "nakapasa na", Toast.LENGTH_LONG).show();
+
+        }
 
     }
-
-
 
     public class PostTask extends AsyncTask {
         private Exception exception;
