@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.javacodegeeks.R;
@@ -22,11 +23,13 @@ import okhttp3.Response;
 public class AndroidHttpPostGetActivity extends Activity{
     OkHttpClient client;
     MediaType JSON;
-
+    TextView text;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        text = (TextView)findViewById(R.id.TextView1);
+        text.setOnClickListener((View.OnClickListener) this);
 
         client = new OkHttpClient();
         JSON = MediaType.parse("application/json; charset=utf-8");
@@ -69,16 +72,20 @@ public class AndroidHttpPostGetActivity extends Activity{
             return null;
         }
     }
-    public void onClick(View v) {
+    public void onClick(View v) throws IOException {
+         makePostRequest(v);
+    }
 
-        public void makePostRequest (View v)throws IOException {
+
+
+    public void  makePostRequest (View v)throws IOException {
             PostTask task = new PostTask();
             task.execute();
             Toast.makeText(getApplicationContext(), "nakapasa na", Toast.LENGTH_LONG).show();
 
         }
 
-    }
+
 
     public class PostTask extends AsyncTask {
         private Exception exception;

@@ -26,9 +26,9 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:background="#454545"
-        android:clickable="true"
         android:onClick="makePostRequest">
         <TextView
+            android:id="@+id/TextView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
