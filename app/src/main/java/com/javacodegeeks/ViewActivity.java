@@ -1,6 +1,7 @@
 package com.javacodegeeks;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +28,7 @@ public class ViewActivity extends Activity{
 
     private EditText areaTXT;
     private Button btnGet;
-
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,10 @@ public class ViewActivity extends Activity{
         btnGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progress = new ProgressDialog(view.getContext());
+                progress.setMessage("Fetching information");
+                progress.setIndeterminate(true);
+
                 new getRequest().execute();
             }
         });
@@ -53,6 +58,7 @@ public class ViewActivity extends Activity{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progress.show();
         }
 
         protected String doInBackground(String... arg0) {
@@ -82,7 +88,9 @@ public class ViewActivity extends Activity{
 
         @Override
         protected void  onPostExecute(String result) {
+
             Log.e("test", result);
+            progress.dismiss();
             areaTXT.setText(result.toString());
         }
 

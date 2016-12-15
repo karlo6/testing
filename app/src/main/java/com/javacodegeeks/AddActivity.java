@@ -1,6 +1,7 @@
 package com.javacodegeeks;
 
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class AddActivity extends AppCompatActivity {
     private EditText nameTXT, quantityTXT, priceTXT;
     private Button btnPost;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,19 @@ public class AddActivity extends AppCompatActivity {
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new postRequest().execute(nameTXT.getText().toString(), quantityTXT.getText().toString(), priceTXT.getText().toString());
+                progress = new ProgressDialog(view.getContext());
+                progress.setMessage("Adding items");
+                progress.setIndeterminate(true);
+
+
+             String test = "^[a-zA-Z]+";
+
+                if(nameTXT.getText().toString().trim().matches(test)){
+                    new postRequest().execute(nameTXT.getText().toString(), quantityTXT.getText().toString(), priceTXT.getText().toString());
+                }
+                else{
+                    nameTXT.setError("Alphabets only");
+                }
             }
         });
 
@@ -56,6 +70,7 @@ public class AddActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progress.show();
         }
 
         protected String doInBackground(String... arg0) {
@@ -112,7 +127,11 @@ public class AddActivity extends AppCompatActivity {
 
         @Override
         protected void  onPostExecute(String result) {
+            progress.dismiss();
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            nameTXT.setText("");
+            quantityTXT.setText("");
+            priceTXT.setText("");
         }
     }
 

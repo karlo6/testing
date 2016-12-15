@@ -1,6 +1,7 @@
 package com.javacodegeeks;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +28,7 @@ public class DeleteActivity extends Activity{
 
     private EditText idTXT;
     private Button btnGet;
-
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,10 @@ public class DeleteActivity extends Activity{
         btnGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progress = new ProgressDialog(view.getContext());
+                progress.setMessage("Deleting id:"+idTXT.getText());
+                progress.setIndeterminate(true);
+
                 new getRequest().execute(idTXT.getText().toString());
             }
         });
@@ -54,6 +59,7 @@ public class DeleteActivity extends Activity{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progress.show();
         }
 
         protected String doInBackground(String... arg0) {
@@ -83,8 +89,10 @@ public class DeleteActivity extends Activity{
 
         @Override
         protected void  onPostExecute(String result) {
+            progress.dismiss();
             Toast.makeText(getApplicationContext(), "Successfully deleted id :" + idTXT.getText(), Toast.LENGTH_LONG).show();
             Log.e("test", result);
+            idTXT.setText("");
 
         }
 

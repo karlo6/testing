@@ -1,6 +1,7 @@
 package com.javacodegeeks;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +30,7 @@ public class SubActivity extends Activity{
     private EditText idTXT;
     private TextView idVIEW, nameVIEW, quantityVIEW, priceVIEW;
     private Button btnGet;
-
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,9 @@ public class SubActivity extends Activity{
         btnGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progress = new ProgressDialog(view.getContext());
+                progress.setMessage("Searching id:"+idTXT.getText());
+                progress.setIndeterminate(true);
                 new getRequest().execute(idTXT.getText().toString());
             }
         });
@@ -60,6 +64,7 @@ public class SubActivity extends Activity{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progress.show();
         }
 
         protected String doInBackground(String... arg0) {
@@ -89,11 +94,13 @@ public class SubActivity extends Activity{
 
         @Override
         protected void  onPostExecute(String result) {
+            progress.dismiss();
             try {
                 JSONObject returnData = new JSONObject(result);
                 nameVIEW.setText(returnData.getString("Name"));
                 quantityVIEW.setText(returnData.getString("Quantity"));
                 priceVIEW.setText(returnData.getString("Price"));
+                idTXT.setText("");
 
             } catch (JSONException e) {
                 Log.e("debug", e.getMessage());

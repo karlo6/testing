@@ -10,21 +10,25 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="40dp"
-        android:id="@+id/nameTXT"/>
+        android:id="@+id/nameTXT"
+        android:inputType="text"
+        />
     <EditText
         android:hint="Quantity:"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="40dp"
-        android:id="@+id/quantityTXT"/>
+        android:id="@+id/quantityTXT"
+        android:inputType="number"/>
     <EditText
         android:hint="Price"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="40dp"
-        android:id="@+id/priceTXT"/>
+        android:id="@+id/priceTXT"
+        android:inputType="number"/>
 
     <Button
         android:text="Post"
