@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -46,7 +48,13 @@ public class DeleteActivity extends Activity{
                 progress.setMessage("Deleting id:"+idTXT.getText());
                 progress.setIndeterminate(true);
 
-                new getRequest().execute(idTXT.getText().toString());
+                if(idTXT.getText().toString().isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Please enter an ID", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    new getRequest().execute(idTXT.getText().toString());
+                }
+
             }
         });
 
@@ -90,6 +98,13 @@ public class DeleteActivity extends Activity{
         @Override
         protected void  onPostExecute(String result) {
             progress.dismiss();
+          //  try{
+                JSONObject returndata = new JSONObject();
+               // returndata = returndata.getString(result);
+
+         //   } catch (JSONException e) {
+           //     e.printStackTrace();
+          //  }
             Toast.makeText(getApplicationContext(), "Successfully deleted id :" + idTXT.getText(), Toast.LENGTH_LONG).show();
             Log.e("test", result);
             idTXT.setText("");

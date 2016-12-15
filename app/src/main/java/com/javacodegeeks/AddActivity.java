@@ -53,12 +53,15 @@ public class AddActivity extends AppCompatActivity {
 
 
              String test = "^[a-zA-Z]+";
-
-                if(nameTXT.getText().toString().trim().matches(test)){
-                    new postRequest().execute(nameTXT.getText().toString(), quantityTXT.getText().toString(), priceTXT.getText().toString());
+                if(nameTXT.getText().toString().isEmpty()||quantityTXT.getText().toString().isEmpty()||priceTXT.getText().toString().isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Please complete fill up", Toast.LENGTH_LONG).show();
                 }
-                else{
-                    nameTXT.setError("Alphabets only");
+                else {
+                    if (nameTXT.getText().toString().trim().matches(test)) {
+                        new postRequest().execute(nameTXT.getText().toString(), quantityTXT.getText().toString(), priceTXT.getText().toString());
+                    } else {
+                        nameTXT.setError("Alphabets only");
+                    }
                 }
             }
         });
