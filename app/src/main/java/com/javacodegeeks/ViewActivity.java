@@ -26,7 +26,6 @@ import java.net.URL;
 public class ViewActivity extends Activity{
 
     private EditText areaTXT;
-    private TextView areaView;
     private Button btnGet;
 
 
@@ -36,10 +35,6 @@ public class ViewActivity extends Activity{
         setContentView(R.layout.view_layout);
 
         areaTXT = (EditText) findViewById(R.id.areaTXT);
-        
-
-
-
         btnGet = (Button) findViewById(R.id.btnGet);
 
         btnGet.setOnClickListener(new View.OnClickListener() {

@@ -5,18 +5,21 @@
     android:orientation="vertical">
 
     <EditText
+        android:hint="Name:"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="40dp"
         android:id="@+id/nameTXT"/>
     <EditText
+        android:hint="Quantity:"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="40dp"
         android:id="@+id/quantityTXT"/>
     <EditText
+        android:hint="Price"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

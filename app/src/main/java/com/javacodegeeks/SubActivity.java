@@ -6,14 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.Button;
 import android.widget.EditText;
 
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
+
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

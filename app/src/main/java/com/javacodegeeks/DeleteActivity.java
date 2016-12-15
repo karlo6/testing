@@ -7,11 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -33,7 +32,7 @@ public class DeleteActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.delete_layout);
 
 
         idTXT = (EditText) findViewById(R.id.idTXT);
