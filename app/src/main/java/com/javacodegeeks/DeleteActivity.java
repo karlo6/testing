@@ -76,7 +76,6 @@ public class DeleteActivity extends Activity{
                 URL url = new URL("http://taisondigital.com.ph/testforyou/delete-product/"+ arg0[0]);
 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
                 InputStream os = new BufferedInputStream(conn.getInputStream());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(os));
 
@@ -98,14 +97,17 @@ public class DeleteActivity extends Activity{
         @Override
         protected void  onPostExecute(String result) {
             progress.dismiss();
-          //  try{
-                JSONObject returndata = new JSONObject();
-               // returndata = returndata.getString(result);
-
-         //   } catch (JSONException e) {
-           //     e.printStackTrace();
-          //  }
-            Toast.makeText(getApplicationContext(), "Successfully deleted id :" + idTXT.getText(), Toast.LENGTH_LONG).show();
+            try {
+                JSONObject value = new JSONObject(result);
+                if("success".equalsIgnoreCase((value.getString("status")))){
+                    Toast.makeText(getApplicationContext(), "Successfully deleted id :" + idTXT.getText(), Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "No ID found!", Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             Log.e("test", result);
             idTXT.setText("");
 
@@ -113,4 +115,5 @@ public class DeleteActivity extends Activity{
 
 
     }
+
 }

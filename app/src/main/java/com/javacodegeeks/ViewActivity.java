@@ -6,10 +6,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,24 +24,38 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Taison_Gary on 12/14/2016.
  */
 
-public class ViewActivity extends Activity{
+public class ViewActivity extends Activity {
 
     private EditText areaTXT;
     private Button btnGet;
     private ProgressDialog progress;
+    private ListView listview;
+    ArrayList<HashMap<String, String>> listdata;
+    ListAdapter adapter;
+    String[] from;
+    int[] to;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_layout);
 
-        areaTXT = (EditText) findViewById(R.id.areaTXT);
+
         btnGet = (Button) findViewById(R.id.btnGet);
+        listview = (ListView) findViewById(R.id.listview);
+        listdata = new ArrayList<>();
+
+
+
 
         btnGet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +63,7 @@ public class ViewActivity extends Activity{
                 progress = new ProgressDialog(view.getContext());
                 progress.setMessage("Fetching information");
                 progress.setIndeterminate(true);
+
 
                 new getRequest().execute();
             }
@@ -72,14 +92,13 @@ public class ViewActivity extends Activity{
                 BufferedReader reader = new BufferedReader(new InputStreamReader(os));
 
                 String line;
-                while((line = reader.readLine()) != null){
+                while ((line = reader.readLine()) != null) {
                     result.append(line);
                 }
                 os.close();
                 reader.close();
                 return result.toString();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 return new String("Exception: " + e.getMessage());
 
             }
@@ -87,11 +106,37 @@ public class ViewActivity extends Activity{
         }
 
         @Override
-        protected void  onPostExecute(String result) {
+        protected void onPostExecute(String result) {
+
+            try {
+                JSONArray listarray = new JSONArray(result);
+                HashMap<String, String> value = new HashMap<>();
+                from = new String[]{"Name", "Quantity", "Price"};
+                to = new int[]{R.id.name, R.id.quantity, R.id.price};
+
+                for (int i = 0; i < listarray.length(); i++) {
+                    JSONObject j = listarray.getJSONObject(i);
+                    String name = j.getString("Name");
+                    String quan = j.getString("Quantity");
+                    String pri = j.getString("Price");
+                    value.put("Name", name);
+                    value.put("Quantity", quan);
+                    value.put("Price", pri);
+                    listdata.add(value);
+                    Log.e("ERROR", value.toString());
+                }
+                adapter = new SimpleAdapter(ViewActivity.this, listdata, R.layout.listview, from, to);
+                listview.setAdapter(adapter);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("ERR", e.getMessage());
+            }
+
 
             Log.e("test", result);
             progress.dismiss();
-            areaTXT.setText(result.toString());
+
         }
 
 

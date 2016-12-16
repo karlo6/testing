@@ -131,7 +131,7 @@ public class AddActivity extends AppCompatActivity {
         @Override
         protected void  onPostExecute(String result) {
             progress.dismiss();
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Successfully Added", Toast.LENGTH_LONG).show();
             nameTXT.setText("");
             quantityTXT.setText("");
             priceTXT.setText("");

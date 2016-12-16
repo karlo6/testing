@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import org.json.JSONException;
@@ -51,7 +52,13 @@ public class SubActivity extends Activity{
                 progress = new ProgressDialog(view.getContext());
                 progress.setMessage("Searching id:"+idTXT.getText());
                 progress.setIndeterminate(true);
-                new getRequest().execute(idTXT.getText().toString());
+                if(idTXT.getText().toString().isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Please enter an ID", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    new getRequest().execute(idTXT.getText().toString());
+                }
+
             }
         });
 
@@ -95,20 +102,30 @@ public class SubActivity extends Activity{
         @Override
         protected void  onPostExecute(String result) {
             progress.dismiss();
-            try {
-                JSONObject returnData = new JSONObject(result);
-                nameVIEW.setText(returnData.getString("Name"));
-                quantityVIEW.setText(returnData.getString("Quantity"));
-                priceVIEW.setText(returnData.getString("Price"));
-                idTXT.setText("");
+            JSONObject returnData = null;
 
+            try {
+                returnData = new JSONObject(result);
+                if ("failed".equalsIgnoreCase((returnData.getString("status")))) {
+                    Toast.makeText(getApplicationContext(), "No ID found!", Toast.LENGTH_LONG).show();
+                }
             } catch (JSONException e) {
-                Log.e("debug", e.getMessage());
+
+                try {
+                    nameVIEW.setText(returnData.getString("Name"));
+                    quantityVIEW.setText(returnData.getString("Quantity"));
+                    priceVIEW.setText(returnData.getString("Price"));
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                    Log.e("debug", e.getMessage());
+                }
+
+
             }
 
 
             Log.e("test", result);
-
+            idTXT.setText("");
         }
 
 
