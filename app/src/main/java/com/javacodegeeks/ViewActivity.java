@@ -2,26 +2,22 @@ package com.javacodegeeks;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ClipData;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.TextViewCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -30,9 +26,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+
 
 /**
  * Created by Taison_Gary on 12/14/2016.
@@ -44,12 +38,13 @@ public class ViewActivity extends Activity {
     private Button btnGet;
     private ProgressDialog progress;
     private ListView listview;
-    ArrayList<HashMap<String, String>> listdata;
-    ListAdapter adapter;
-    String[] from;
-    int[] to;
-    public JSONArray listarray;
-    public String[] mKeys;
+    public ArrayList<Data> listdata = new ArrayList<>();
+    public ListAdapter adapter;
+   public class Data {
+       String name;
+       String quantity;
+       String price;
+   }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +54,8 @@ public class ViewActivity extends Activity {
 
         btnGet = (Button) findViewById(R.id.btnGet);
         listview = (ListView) findViewById(R.id.listview);
-        listdata = new ArrayList<>();
-        adapter = new HashMapAdapter(this, listdata, R.layout.listview, mKeys);
-
-
-
+        adapter = new ListAdapter(this);
+        listview.setAdapter(adapter);
         btnGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,33 +107,25 @@ public class ViewActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
 
-         /*  try {
+          try {
                 JSONArray listarray = new JSONArray(result);
-               from = new String[]{"Name", "Quantity", "Price"};
-               HashMap<String, String> value = new HashMap<>();
-
-                to = new int[]{R.id.name, R.id.quantity, R.id.price};
 
                 for (int i = 0; i < listarray.length(); i++) {
-                    JSONObject j = listarray.getJSONObject(i);
-                    String name = j.getString("Name");
-                    String quan = j.getString("Quantity");
-                    String pri = j.getString("Price");
-                    value.put("Name", name);
-                    value.put("Quantity", quan);
-                    value.put("Price", pri);
-                    listdata.add(value);
-                    Log.e("ERROR", value.toString());
+                    JSONObject j = new JSONObject(listarray.get(i).toString());
+                    Data Add = new Data();
+                    Add.name=j.getString("Name");
+                    Add.quantity=j.getString("Quantity");
+                    Add.price=j.getString("Price");
+                    listdata.add(Add);
+                    Log.e("ERROR", Add.toString());
                 }
-                adapter = new SimpleAdapter(ViewActivity.this, listdata, R.layout.listview, from, to);
-                listview.setAdapter(adapter);
-
+            adapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e("ERR", e.getMessage());
-            }*/
-            adapter = new HashMapAdapter(mKeys, listdata, R.layout.listview);
-            listview.setAdapter(adapter);
+            }
+
+
             Log.e("test", result);
             progress.dismiss();
 
@@ -149,46 +133,51 @@ public class ViewActivity extends Activity {
 
 
     }
-            public class HashMapAdapter extends BaseAdapter {
-                private HashMap<String, String> mValue = new HashMap<String, String>();
-                JSONArray listarray = new JSONArray();
 
+          public class ListAdapter extends BaseAdapter {
+              ViewActivity main;
 
-                public HashMapAdapter(HashMap<String, String> value) {
-                    mValue = value;
-                    mKeys = mValue.keySet().toArray(new String[value.size()]);
-                }
+              ListAdapter(ViewActivity main){
+                  this.main = main;
+              }
 
-                    @Override
-                    public int getCount () {
-                        return mValue.size();
-                    }
+              @Override
+              public int getCount(){
+                  return main.listdata.size();
+              }
+              @Override
+              public Object getItem(int position){
+                  return null;
+              }
+              @Override
+              public long getItemId(int position){
+                  return 0;
+              }
+               class ViewHolderItem{
+                  TextView  name;
+                  TextView  quantity;
+                  TextView  price;
+              }
+              @Override
+              public View getView(int position, View convertView, ViewGroup parent){
+                  ViewHolderItem holder = new ViewHolderItem();
+                  if(convertView==null){
+                      LayoutInflater inflater = (LayoutInflater)main.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                      convertView = inflater.inflate(R.layout.listview, null);
 
-                    @Override
-                    public Object getItem ( int position){
-                        return mValue.get(mKeys[position]);
-                    }
-                    @Override
-                    public long getItemId ( int arg0){
-                        return arg0;
-                    }
-                    @Override
-                    public View getView ( int pos, View convertView, ViewGroup parent){
-                        String key = mKeys[pos];
-                        String value = getItem(pos).toString();
-
-                        TextView nam = (TextView) convertView.findViewById(R.id.name);
-                        TextView quan = (TextView) convertView.findViewById(R.id.quantity);
-                        TextView pri = (TextView) convertView.findViewById(R.id.price);
-
-                        mValue.put("Name", value);
-                        mValue.put("Quantity", value);
-                        mValue.put("Price", value);
-                        listdata.add(mValue);
-                        return convertView;
-                    }
-
- }
-
+                      holder.name = (TextView) convertView.findViewById(R.id.name);
+                      holder.quantity = (TextView) convertView.findViewById(R.id.quantity);
+                      holder.price = (TextView) convertView.findViewById(R.id.price);
+                      convertView.setTag(holder);
+                  }
+                  else {
+                      holder = (ViewHolderItem) convertView.getTag();
+                  }
+                  holder.name.setText(this.main.listdata.get(position).name);
+                  holder.quantity.setText(this.main.listdata.get(position).quantity);
+                  holder.price.setText(this.main.listdata.get(position).price);
+                  return convertView;
+              }
+          }
 
 }
