@@ -2,11 +2,15 @@ package com.javacodegeeks;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.TextViewCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
@@ -17,6 +21,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -43,6 +48,8 @@ public class ViewActivity extends Activity {
     ListAdapter adapter;
     String[] from;
     int[] to;
+    public JSONArray listarray;
+    public String[] mKeys;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +60,7 @@ public class ViewActivity extends Activity {
         btnGet = (Button) findViewById(R.id.btnGet);
         listview = (ListView) findViewById(R.id.listview);
         listdata = new ArrayList<>();
-
+        adapter = new HashMapAdapter(this, listdata, R.layout.listview, mKeys);
 
 
 
@@ -108,10 +115,11 @@ public class ViewActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
 
-            try {
+         /*  try {
                 JSONArray listarray = new JSONArray(result);
-                HashMap<String, String> value = new HashMap<>();
-                from = new String[]{"Name", "Quantity", "Price"};
+               from = new String[]{"Name", "Quantity", "Price"};
+               HashMap<String, String> value = new HashMap<>();
+
                 to = new int[]{R.id.name, R.id.quantity, R.id.price};
 
                 for (int i = 0; i < listarray.length(); i++) {
@@ -131,9 +139,9 @@ public class ViewActivity extends Activity {
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e("ERR", e.getMessage());
-            }
-
-
+            }*/
+            adapter = new HashMapAdapter(mKeys, listdata, R.layout.listview);
+            listview.setAdapter(adapter);
             Log.e("test", result);
             progress.dismiss();
 
@@ -141,4 +149,46 @@ public class ViewActivity extends Activity {
 
 
     }
+            public class HashMapAdapter extends BaseAdapter {
+                private HashMap<String, String> mValue = new HashMap<String, String>();
+                JSONArray listarray = new JSONArray();
+
+
+                public HashMapAdapter(HashMap<String, String> value) {
+                    mValue = value;
+                    mKeys = mValue.keySet().toArray(new String[value.size()]);
+                }
+
+                    @Override
+                    public int getCount () {
+                        return mValue.size();
+                    }
+
+                    @Override
+                    public Object getItem ( int position){
+                        return mValue.get(mKeys[position]);
+                    }
+                    @Override
+                    public long getItemId ( int arg0){
+                        return arg0;
+                    }
+                    @Override
+                    public View getView ( int pos, View convertView, ViewGroup parent){
+                        String key = mKeys[pos];
+                        String value = getItem(pos).toString();
+
+                        TextView nam = (TextView) convertView.findViewById(R.id.name);
+                        TextView quan = (TextView) convertView.findViewById(R.id.quantity);
+                        TextView pri = (TextView) convertView.findViewById(R.id.price);
+
+                        mValue.put("Name", value);
+                        mValue.put("Quantity", value);
+                        mValue.put("Price", value);
+                        listdata.add(mValue);
+                        return convertView;
+                    }
+
+ }
+
+
 }
