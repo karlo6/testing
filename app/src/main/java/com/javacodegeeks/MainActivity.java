@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class MainActivity extends Activity {
 
-    private Button btnSpec, btnAdd, btnDelete, btnView;
+    private Button btnSpec, btnAdd, btnDelete, btnView, btnRec;
 
 
     @Override
@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
         btnSpec = (Button) findViewById(R.id.btnSpec);
         btnDelete = (Button) findViewById(R.id.btnDelete);
         btnView = (Button) findViewById(R.id.btnView);
+        btnRec = (Button) findViewById(R.id.btnRec);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +52,14 @@ public class MainActivity extends Activity {
             }
         });
 
+
+        btnRec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent vel = new Intent(MainActivity.this, RecyclerActivity.class);
+                startActivity(vel);
+            }
+        });
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -38,6 +38,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/btnSpec" />
+    <Button
+        android:text="Recycler Activity"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/btnRec" />
 
 
 </LinearLayout>
